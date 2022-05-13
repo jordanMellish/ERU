@@ -46,7 +46,7 @@ def set_filename_details():
     print(""" Select Drone:
         1) MAIR - Mavic Air
         2) M210 - Matrice 210
-        3) PBOP - Parrot Bebop
+        3) MMI2 - Mavic Mini 2
         4) SPRO - Swell Pro Splash Drone
         """)
     valid_drone_selection = False
@@ -59,7 +59,7 @@ def set_filename_details():
             drone = "M210"
             valid_drone_selection = True
         if drone_selection == "3":
-            drone = "PBOP"
+            drone = "MMI2"
             valid_drone_selection = True
         if drone_selection == "4":
             drone = "SPRO"
@@ -71,7 +71,7 @@ def set_filename_details():
     2) Z30 - Zoom camera for Matrice 210
     3) X5S - 5.7K camera for Matrice 210
     4) MSP - Multi Spectral Camera
-    5) STK - Stock for Mavic Air, Parrot, Splash Drone
+    5) STK - Stock for Mavic Air, Mini 2 & Splash Drone
     """)
     valid_camera_selection = False
     while not valid_camera_selection:

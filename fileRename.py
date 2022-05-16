@@ -2,7 +2,6 @@
 
 import os
 
-
 def main():
     valid_input = False
     while not valid_input:
@@ -11,16 +10,16 @@ def main():
             2) Commit filename changes
             3) Exit
             """)
-        menu_selection = input(">>> ")
-        if menu_selection == "1":
+        menu_selection = int(input(">>> "))
+        if menu_selection == 1:
             new_filename = set_filename_details()
             print()
-        elif menu_selection == "2":
+        elif menu_selection == 2:
             print("Committing changes menu....")
             file_source = get_file_source()
             starting_file_number = get_starting_number()
             commit_filename_changes(new_filename, file_source, starting_file_number)
-        elif menu_selection == "3":
+        elif menu_selection == 3:
             exit()
         else:
             print("Incorrect selection entered, please enter either 1, 2 or 3")
@@ -46,7 +45,7 @@ def set_filename_details():
     print(""" Select Drone:
         1) MAIR - Mavic Air
         2) M210 - Matrice 210
-        3) PBOP - Parrot Bebop
+        3) MMI2 - Mavic Mini 2
         4) SPRO - Swell Pro Splash Drone
         """)
     valid_drone_selection = False
@@ -59,7 +58,7 @@ def set_filename_details():
             drone = "M210"
             valid_drone_selection = True
         if drone_selection == "3":
-            drone = "PBOP"
+            drone = "MMI2"
             valid_drone_selection = True
         if drone_selection == "4":
             drone = "SPRO"
@@ -71,7 +70,7 @@ def set_filename_details():
     2) Z30 - Zoom camera for Matrice 210
     3) X5S - 5.7K camera for Matrice 210
     4) MSP - Multi Spectral Camera
-    5) STK - Stock for Mavic Air, Parrot, Splash Drone
+    5) STK - Stock for Mavic Air, Mini 2 & Splash Drone
     """)
     valid_camera_selection = False
     while not valid_camera_selection:
@@ -99,14 +98,28 @@ def set_filename_details():
 
 
 def commit_filename_changes(new_filename, file_source, starting_file_number):
+
     for file in os.listdir(file_source):
         source = file_source + file
         file_extension = "." + file.split('.')[-1]
+        lower_file_extension = file_extension.lower()
+        print(lower_file_extension)
+        #TODO: add in array of file types to be sorted through.
+        if lower_file_extension == ".jpg" or lower_file_extension == ".png":
+            sub_folder_name = "Image/"
+        elif lower_file_extension == ".mp4" or lower_file_extension == ".mov":
+            sub_folder_name = "Video/"
+        else:
+            sub_folder_name = "Misc/"
         destination = new_filename + "{:03d}".format(starting_file_number) + file_extension
-        destination = file_source + destination
-        os.rename(source, destination)
-        starting_file_number += 1
-
+        new_destination = file_source + sub_folder_name + destination
+        isFile = os.path.isfile(source)
+        if isFile:
+            os.rename(source, new_destination)
+            starting_file_number += 1
+        else:
+            break
+            
 
 def has_numbers(string):
     return any(char.isdigit() for char in string)
@@ -118,6 +131,20 @@ def get_file_source():
         """)
     file_source = input(">>>")
     formatted_source = file_source.replace(" ", "") + r"/"
+    """Create new folders"""
+    #for Images
+    dir = "Image"
+    path = os.path.join(formatted_source, dir)
+    os.mkdir(path)
+    #for Videos
+    dir = "Video"
+    path = os.path.join(formatted_source, dir)
+    os.mkdir(path)
+    #for Misc.
+    dir = "Misc"  
+    path = os.path.join(formatted_source, dir)
+    os.mkdir(path)
+    print("Folders Created")
     return formatted_source
 
 
